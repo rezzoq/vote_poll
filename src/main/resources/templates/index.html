@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel — Vote Poll</title>
+  <style>
+    body  { font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 0 20px; }
+    h1    { font-size: 1.6rem; }
+    h2    { font-size: 1.2rem; margin-top: 32px; }
+    label { display: block; margin-bottom: 8px; }
+    input[type=text], input[type=number] {
+      padding: 6px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; width: 100%; max-width: 340px;
+    }
+    .btn  { margin-top: 12px; padding: 8px 22px; background: #1a73e8; color: #fff;
+            border: none; border-radius: 4px; font-size: 0.95rem; cursor: pointer; }
+    .btn:hover { background: #1558b0; }
+    .btn-logout { background: #888; }
+    .btn-logout:hover { background: #555; }
+    .token-list { list-style: none; padding: 0; }
+    .token-list li { margin: 4px 0; font-size: 0.9rem; }
+    .token-list a  { color: #1a73e8; word-break: break-all; }
+    .stats { margin: 8px 0; font-size: 1rem; }
+  </style>
+</head>
+<body>
+
+  <h1>Admin Panel</h1>
+
+  <h2>Create a new poll</h2>
+  <form th:action="@{/createPoll}" method="post">
+    <label>Question
+      <input type="text" name="question" placeholder="e.g. Should we adopt remote work?" required>
+    </label>
+    <label>Number of voters
+      <input type="number" name="userCount" min="1" max="500" placeholder="e.g. 10" required>
+    </label>
+    <button class="btn" type="submit">Create poll</button>
+  </form>
+
+  <div th:if="${poll != null}">
+    <h2>Active poll</h2>
+    <p><strong th:text="${poll.question}"></strong></p>
+    <p class="stats">
+      Results so far: <strong>Yes — <span th:text="${poll.yesCount}"></span></strong>,
+      <strong>No — <span th:text="${poll.noCount}"></span></strong>
+    </p>
+
+    <h2>Voting links <span th:text="'(' + ${#lists.size(tokens)} + ' unused)'"></span></h2>
+    <ul class="token-list">
+      <li th:each="token : ${tokens}">
+        <a th:href="@{/vote/{t}(t=${token})}" th:text="${token}"></a>
+      </li>
+    </ul>
+  </div>
+
+  <br>
+  <form th:action="@{/logout}" method="post">
+    <button class="btn btn-logout" type="submit">Log out</button>
+  </form>
+
+</body>
+</html>

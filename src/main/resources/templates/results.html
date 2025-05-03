@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Results — Vote Poll</title>
+  <style>
+    body  { font-family: Arial, sans-serif; max-width: 500px; margin: 60px auto; padding: 0 20px; }
+    h1    { font-size: 1.6rem; }
+    .question { font-size: 1.1rem; color: #333; margin: 16px 0 24px; }
+    .bar-row  { margin: 10px 0; }
+    .bar-label { font-size: 0.95rem; margin-bottom: 4px; }
+    .bar-track { background: #eee; border-radius: 4px; height: 28px; position: relative; }
+    .bar-fill  { height: 100%; border-radius: 4px; display: flex; align-items: center;
+                 padding-left: 10px; color: #fff; font-weight: bold; font-size: 0.9rem;
+                 transition: width 0.4s; }
+    .bar-yes   { background: #34a853; }
+    .bar-no    { background: #ea4335; }
+    .total     { margin-top: 20px; color: #666; font-size: 0.9rem; }
+    a          { display: inline-block; margin-top: 28px; color: #1a73e8; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <div th:if="${poll != null}">
+    <h1>Poll Results</h1>
+    <p class="question" th:text="${poll.question}"></p>
+
+    <div th:with="total=${poll.yesCount + poll.noCount}">
+
+      <div class="bar-row">
+        <div class="bar-label">Yes — <span th:text="${poll.yesCount}"></span></div>
+        <div class="bar-track">
+          <div class="bar-fill bar-yes"
+               th:style="${total > 0 ? 'width:' + (poll.yesCount * 100 / total) + '%' : 'width:0%'}"
+               th:text="${total > 0 ? (poll.yesCount * 100 / total) + '%' : ''}"></div>
+        </div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">No — <span th:text="${poll.noCount}"></span></div>
+        <div class="bar-track">
+          <div class="bar-fill bar-no"
+               th:style="${total > 0 ? 'width:' + (poll.noCount * 100 / total) + '%' : 'width:0%'}"
+               th:text="${total > 0 ? (poll.noCount * 100 / total) + '%' : ''}"></div>
+        </div>
+      </div>
+
+      <p class="total">Total votes: <span th:text="${total}"></span></p>
+    </div>
+  </div>
+
+  <div th:if="${poll == null}">
+    <h1>No active poll</h1>
+    <p>There is no active poll at the moment.</p>
+  </div>
+
+  <a href="/">← Back</a>
+
+</body>
+</html>

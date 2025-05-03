@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Vote</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 500px; margin: 60px auto; padding: 0 20px; }
+    h1   { font-size: 1.1rem; color: #555; margin-bottom: 6px; }
+    h2   { font-size: 1.4rem; margin-top: 0; }
+    .options { margin: 24px 0; display: flex; flex-direction: column; gap: 12px; }
+    label { display: flex; align-items: center; gap: 10px; font-size: 1rem; cursor: pointer; }
+    button { margin-top: 16px; padding: 10px 28px; background: #1a73e8; color: #fff;
+             border: none; border-radius: 4px; font-size: 1rem; cursor: pointer; }
+    button:hover { background: #1558b0; }
+  </style>
+</head>
+<body>
+
+  <h1>Poll</h1>
+  <h2 th:text="${poll != null ? poll.question : 'Question not available'}"></h2>
+
+  <form th:action="@{/submitVote}" method="post">
+    <input type="hidden" name="token" th:value="${token}">
+    <div class="options">
+      <label>
+        <input type="radio" name="voteYes" value="true" required> Yes
+      </label>
+      <label>
+        <input type="radio" name="voteYes" value="false"> No
+      </label>
+    </div>
+    <button type="submit">Submit vote</button>
+  </form>
+
+</body>
+</html>
